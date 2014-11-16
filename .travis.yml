@@ -1,0 +1,20 @@
+language: node_js
+node_js:
+  - "0.10"
+
+before_install:
+  - npm install gulp -g
+  - npm install bower -g
+
+install:
+  - npm install
+  - bower install
+
+before_script:
+
+script:
+  - gulp test
+
+after_script:
+  - cat test/results/coverage/*/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+  
