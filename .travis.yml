@@ -9,6 +9,8 @@ before_install:
 install:
   - npm install
   - bower install
+  - git submodule init
+  - git submodule update -f --remote
 
 before_script:
 

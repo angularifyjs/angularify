@@ -56,3 +56,7 @@ Main Task
 gulp.task('bundle', function() {
   return gulp.src('./dev/**/');
 });
+
+gulp.task('test', function() {
+
+});
