@@ -11,7 +11,7 @@ var env = GLOBAL.env = {
   API: 'api',
   BROWSER: 'phantom',
   CODE: 'dev',
-  COMPILE_MODE: 'auto',
+  LOOKUP_MODE: 'auto',
   DEBUG: 'no',
   LIVERELOAD: 35729,
   MODULE: null,
@@ -40,12 +40,7 @@ var watch = function() {
   var notification = function(event) {
     console.log([moment().format('hh:mm:ss'), 'File', event.path, 'was', event.type, ', running tasks...'].join(' '));
   };
-  gulp.watch(['./dev/**/*.coffee'], ['coffee']).on('change', notification);
-  gulp.watch(['./dev/**/*.less', '!./dev/**/theme/**'], ['less']).on('change', notification);
-  gulp.watch(['./dev/**/theme/**/*.less'], ['less:theme', 'less']).on('change', notification);
-  gulp.watch(['./dev/**/*.scss'], ['scss']).on('change', notification);
-  gulp.watch('./env/**', ['env']).on('change', notification);
-  gulp.watch(['./angularify.json', './tmp/**/*.js', './dev/**/*.js', './dev/**/*.html'], ['bundle']).on('change', notification);
+  gulp.watch(['./env/**'], ['env']).on('change', notification);
 };
 
 /**************************************************************
