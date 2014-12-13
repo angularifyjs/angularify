@@ -1,0 +1,28 @@
+{
+  "baseUrls": [
+    ".tmp",
+    "dev"
+  ],
+  "dependencies": {
+    "ngResource": [
+      "/vendors/angular-resource/angular-resource.min.js"
+    ],
+    "ngSanitize": [
+      "/vendors/angular-sanitize/angular-sanitize.min.js"
+    ],
+    "ui.router": [
+      "/vendors/angular-ui-router/release/angular-ui-router.min.js"
+    ],
+
+
+
+    "app": [
+      "/app/css.css",
+      "/vendors/angular/angular.min.js",
+      "/app/js.js"
+    ]
+  },
+  "priorities": {
+
+  }
+}

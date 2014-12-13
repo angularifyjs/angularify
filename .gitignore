@@ -1,11 +1,14 @@
 ########################
 # angularify
 ########################
+.angularify
 .build
 .tmp
 build
 test/results/*
 vendors
+dev/sitemap.xml
+dev/sitemap.xml.gz
 
 ########################
 # node.js / npm
