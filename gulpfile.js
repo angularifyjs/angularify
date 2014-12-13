@@ -1,7 +1,14 @@
 var _ = require('lodash');
 var gulp = require('gulp');
 var moment = require('moment');
-var plugins = require('gulp-load-plugins')();
+var plugins = require('gulp-load-plugins')({
+  rename: {
+    'gulp-angular-compiler': 'ng-compiler'
+  }
+});
+
+// tmp
+plugins['ng-compiler'] = require('gulp-angular-compiler');
 
 /**************************************************************
 ENV
@@ -53,8 +60,12 @@ Fuction Task
 Main Task
 /*************************************************************/
 
-gulp.task('bundle', function() {
-  return gulp.src('./dev/**/');
+gulp.task('compiler', function() {
+  return gulp.src(['./dev/**/*.html'])
+    .pipe(plugins['ng-compiler']({
+
+    }))
+    .pipe(gulp.dest('./.tmp'));
 });
 
 gulp.task('test', function() {
