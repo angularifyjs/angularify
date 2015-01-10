@@ -1,19 +1,24 @@
 {
   "bitwise": true,
+  "boss": true,
+  "browser": true,
+  "camelcase": true,
+  "eqnull": true,
+  "expr": true,
+  "globals": {
+    "angular": false
+  },
+  "globalstrict": true,
   "immed": true,
+  "indent": 2,
+  "laxbreak": true,
+  "loopfunc": true,
+  "maxlen": 200,
   "newcap": true,
   "noarg": true,
   "noempty": true,
   "nonew": true,
-  "trailing": true,
-  "maxlen": 200,
-  "boss": true,
-  "eqnull": true,
-  "expr": true,
-  "globalstrict": true,
-  "laxbreak": true,
-  "loopfunc": true,
   "sub": true,
-  "undef": true,
-  "indent": 2
+  "trailing": true,
+  "undef": true
 }

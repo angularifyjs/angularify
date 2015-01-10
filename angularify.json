@@ -1,8 +1,14 @@
 {
-  "baseUrls": [
+  "mode": "auto",
+  "baseDirs": [
     ".tmp",
     "dev"
   ],
+  "exts": {
+    "include": ["js", "min.js"],
+    "js": ["js", "min.js"],
+    "css": ["css", "min.css"]
+  },
   "dependencies": {
     "ngResource": [
       "/vendors/angular-resource/angular-resource.min.js"
@@ -13,9 +19,6 @@
     "ui.router": [
       "/vendors/angular-ui-router/release/angular-ui-router.min.js"
     ],
-
-
-
     "app": [
       "/app/css.css",
       "/vendors/angular/angular.min.js",
