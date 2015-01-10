@@ -77,7 +77,14 @@ gulp.task('clean-build', function() {
   return gulp.src(['./.build', './build'], {
       read: false
     })
-    .pipe(clean());
+    .pipe(plugins['clean']());
+});
+
+gulp.task('clean-build-end', function() {
+  return gulp.src(['./.build'], {
+      read: false
+    })
+    .pipe(plugins['clean']());
 });
 
 gulp.task('clean-dev', function() {
@@ -101,6 +108,11 @@ gulp.task('compile', function() {
     .pipe(plugins['angular-compiler']())
     .pipe(gulp.dest('./.tmp'))
     .pipe(plugins['connect'].reload());
+});
+
+gulp.task('copy-build', function() {
+  return gulp.src(['./.build/**', '!./.build/test/**', '!./.build/vendors/**', '!./.build/**/*.{html,css,js}'])
+    .pipe(gulp.dest('./build'));
 });
 
 gulp.task('copy-dev', function() {
@@ -176,12 +188,13 @@ gulp.task('scss:theme', function() {
 });
 
 gulp.task('useref', function() {
+  var assets = plugins['useref'].assets();
   var jsFilter = plugins['filter']('**/*.js');
   var cssFilter = plugins['filter']('**/*.css');
   var htmlFilter = plugins['filter']('**/*.html');
 
   return gulp.src(['./.build/**/*.html', '!./.build/vendors/**'])
-    .pipe(plugins['useref'].assets())
+    .pipe(assets)
     
     .pipe(jsFilter)
     .pipe(plugins['uglify']())
@@ -192,10 +205,10 @@ gulp.task('useref', function() {
     .pipe(cssFilter.restore())
 
     .pipe(plugins['rev']())
-    .pipe(plugins['rev'].mainfest())
+    .pipe(plugins['rev'].manifest())
 
-    .pipe(useref.restore())
-    .pipe(useref())
+    .pipe(assets.restore())
+    .pipe(plugins['useref']())
     .pipe(plugins['revReplace']())
     .pipe(gulp.dest('./build'))
 
