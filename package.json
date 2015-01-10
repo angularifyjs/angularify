@@ -17,13 +17,11 @@
     "boilerplate"
   ],
   "author": "Henry Tao <hi@henrytao.me>",
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/angularifyjs/angularify/blob/master/LICENSE",
-      "description": "Copyright (c) 2014 Angularfiy.org & HenryTao."
-    }
-  ],
+  "licenses": [{
+    "type": "MIT",
+    "url": "https://github.com/angularifyjs/angularify/blob/master/LICENSE",
+    "description": "Copyright (c) 2014 Angularfiy.org & HenryTao."
+  }],
   "bugs": {
     "url": "https://github.com/angularifyjs/angularify/issues"
   },

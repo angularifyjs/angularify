@@ -106,7 +106,7 @@ gulp.task('coffee', function() {
 gulp.task('compile', function() {
   return gulp.src(['./dev/**/*.html'])
     .pipe(plugins['angular-compiler']({
-      
+
     }))
     .pipe(gulp.dest('./.tmp'))
     .pipe(plugins['connect'].reload());
@@ -197,24 +197,24 @@ gulp.task('useref', function() {
 
   return gulp.src(['./.build/**/*.html', '!./.build/vendors/**'])
     .pipe(assets)
-    
-    .pipe(jsFilter)
+
+  .pipe(jsFilter)
     .pipe(plugins['uglify']())
     .pipe(jsFilter.restore())
-    
-    .pipe(cssFilter)
+
+  .pipe(cssFilter)
     .pipe(plugins['minifyCss']())
     .pipe(cssFilter.restore())
 
-    .pipe(plugins['rev']())
+  .pipe(plugins['rev']())
     .pipe(plugins['rev'].manifest())
 
-    .pipe(assets.restore())
+  .pipe(assets.restore())
     .pipe(plugins['useref']())
     .pipe(plugins['revReplace']())
     .pipe(gulp.dest('./build'))
 
-    .pipe(htmlFilter)
+  .pipe(htmlFilter)
     .pipe(plugins['htmlmin']({
       removeComments: true,
       // removeCommentsFromCDATA: true,
