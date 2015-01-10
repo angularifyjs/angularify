@@ -106,7 +106,7 @@ gulp.task('coffee', function() {
 gulp.task('compile', function() {
   return gulp.src(['./dev/**/*.html'])
     .pipe(plugins['angular-compiler']({
-
+      
     }))
     .pipe(gulp.dest('./.tmp'))
     .pipe(plugins['connect'].reload());
@@ -197,24 +197,18 @@ gulp.task('useref', function() {
 
   return gulp.src(['./.build/**/*.html', '!./.build/vendors/**'])
     .pipe(assets)
-
-  .pipe(jsFilter)
+    .pipe(jsFilter)
     .pipe(plugins['uglify']())
     .pipe(jsFilter.restore())
-
-  .pipe(cssFilter)
+    .pipe(cssFilter)
     .pipe(plugins['minifyCss']())
     .pipe(cssFilter.restore())
-
-  .pipe(plugins['rev']())
-    .pipe(plugins['rev'].manifest())
-
-  .pipe(assets.restore())
+    .pipe(plugins['rev']())
+    .pipe(assets.restore())
     .pipe(plugins['useref']())
     .pipe(plugins['revReplace']())
     .pipe(gulp.dest('./build'))
-
-  .pipe(htmlFilter)
+    .pipe(htmlFilter)
     .pipe(plugins['htmlmin']({
       removeComments: true,
       // removeCommentsFromCDATA: true,
@@ -236,6 +230,7 @@ Main Task
 
 gulp.task('build', function(done) {
   var tasks = ['clean-dev', 'scss', 'scss:theme', 'less', 'less:theme', 'coffee', 'compile', 'jshint', 'jscs'];
+  tasks = [];
   if (env.CODE === 'build') {
     tasks = _.union(tasks, ['clean-build', 'copy-vendors', 'copy-dev', 'copy-tmp', 'imagemin', 'ngAnnotate', 'useref', 'copy-build', 'clean-build-end']);
   }
