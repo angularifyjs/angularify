@@ -105,7 +105,9 @@ gulp.task('coffee', function() {
 
 gulp.task('compile', function() {
   return gulp.src(['./dev/**/*.html'])
-    .pipe(plugins['angular-compiler']())
+    .pipe(plugins['angular-compiler']({
+      
+    }))
     .pipe(gulp.dest('./.tmp'))
     .pipe(plugins['connect'].reload());
 });
