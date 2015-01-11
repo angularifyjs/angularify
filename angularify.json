@@ -10,19 +10,27 @@
     "css": ["css", "min.css"]
   },
   "dependencies": {
-    "ngResource": [
-      "/vendors/angular-resource/angular-resource.min.js"
+    "ngRoute": [
+      "vendors/angular-route/angular-route.js"
     ],
-    "ngSanitize": [
-      "/vendors/angular-sanitize/angular-sanitize.min.js"
+    "todomvc": [
+      "vendors/todomvc-common/base.css",
+      "app/css.css",
+      "vendors/todomvc-common/base.js",
+      "vendors/angular/angular.js",
+      "app/js.js"
     ],
-    "ui.router": [
-      "/vendors/angular-ui-router/release/angular-ui-router.min.js"
+    "todomvc-todoCtrl": [
+      "common/controllers/todoCtrl.js"
     ],
-    "app": [
-      "/app/css.css",
-      "/vendors/angular/angular.min.js",
-      "/app/js.js"
+    "todomvc-todoEscape": [
+      "common/directives/todoEscape.js"
+    ],
+    "todomvc-todoFocus": [
+      "common/directives/todoFocus.js"
+    ],
+    "todomvc-todoStorage": [
+      "common/services/todoStorage.js"
     ]
   },
   "priorities": {

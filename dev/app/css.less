@@ -1,3 +1,30 @@
 body {
-	margin: 5px;
+  width: 100%;
+}
+ng-view {
+  display: block;
+  padding: 0px 8px;
+  margin: auto;
+  max-width: 480px;
+}
+#todo-list {
+  li.editing {
+    form {
+      padding-left: 43px;
+      input.edit {
+        margin: 0px;
+        width: 100%;
+      }
+    }
+  }
+}
+#clear-completed {
+  @media (max-width: 480px) {
+    max-width: 90px;
+		text-overflow: ellipsis;
+		display: inline-block;
+		height: 20px;
+		overflow: hidden;
+		padding: 0px;
+  }
 }

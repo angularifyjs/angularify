@@ -1,26 +1,27 @@
 <!doctype html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!-->
-<html class="no-js" ng-app="app" xmlns="http://www.w3.org/1999/xhtml">
-<!--<![endif]-->
+<html ng-app="todomvc" xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
   <base href="/">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Angularify</title>
-  <meta name="description" content="Best practices for bootstrapping scalable AngularJS app">
+  <title>Angularify • TodoMVC</title>
+  <meta name="description" content="Best practices for bootstrapping scalable AngularJS app | angularify.org">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  
-  <!-- angularify:app:css -->
+
+  <!-- angularify:todomvc:css -->
+
+  <style>
+  [ng-cloak] {
+    display: none;
+  }
+  </style>
 
 </head>
 
 <body>
 
-  <!--[if lt IE 7]>
+  <!--[if lt IE 9]>
     <p class="browsehappy">
       You are using an
       <strong>
@@ -31,31 +32,82 @@
       to improve your experience.
     </p>
   <![endif]-->
-  <!--[if lt IE 9]>
-    <script src="/vendors/es5-shim/es5-shim.js">
-
-    </script>
-    <script src="/vendors/json3/lib/json3.min.js">
-
-    </script>
-  <![endif]-->
 
   <!-- Add your site or application content here -->
 
-  <div ui-view=""></div>
+  <ng-view></ng-view>
+
+  <script type="text/ng-template" id="todomvc-index.html">
+    <section id="todoapp">
+      <header id="header">
+        <h1>todos</h1>
+        <form id="todo-form" ng-submit="addTodo()">
+          <input id="new-todo" placeholder="What needs to be done?" ng-model="newTodo" ng-disabled="saving" autofocus>
+        </form>
+      </header>
+      <section id="main" ng-show="todos.length" ng-cloak>
+        <input id="toggle-all" type="checkbox" ng-model="allChecked" ng-click="markAll(allChecked)">
+        <label for="toggle-all">Mark all as complete</label>
+        <ul id="todo-list">
+          <li ng-repeat="todo in todos | filter:statusFilter track by $index" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
+            <div class="view">
+              <input class="toggle" type="checkbox" ng-model="todo.completed" ng-change="toggleCompleted(todo)">
+              <label ng-dblclick="editTodo(todo)">{{todo.title}}</label>
+              <button class="destroy" ng-click="removeTodo(todo)"></button>
+            </div>
+            <form ng-submit="saveEdits(todo, 'submit')">
+              <input class="edit" ng-trim="false" ng-model="todo.title" todo-escape="revertEdits(todo)" ng-blur="saveEdits(todo, 'blur')" todo-focus="todo == editedTodo">
+            </form>
+          </li>
+        </ul>
+      </section>
+      <footer id="footer" ng-show="todos.length" ng-cloak>
+        <span id="todo-count"><strong>{{remainingCount}}</strong>
+            <ng-pluralize count="remainingCount" when="{ one: 'item left', other: 'items left' }"></ng-pluralize>
+          </span>
+        <ul id="filters">
+          <li>
+            <a ng-class="{selected: status == ''} " href="#/">All</a>
+          </li>
+          <li>
+            <a ng-class="{selected: status == 'active'}" href="#/active">Active</a>
+          </li>
+          <li>
+            <a ng-class="{selected: status == 'completed'}" href="#/completed">Completed</a>
+          </li>
+        </ul>
+        <button id="clear-completed" ng-click="clearCompletedTodos()" ng-show="completedCount">Clear completed ({{completedCount}})</button>
+      </footer>
+    </section>
+    <footer id="info">
+      <p>Double-click to edit a todo</p>
+      <p>Credits:
+        <a href="https://github.com/henrytao-me">Henry Tao</a>,
+      </p>
+      <p>Reference <a href="http://todomvc.com/examples/angularjs/#/">AngularJS TodoMVC</a>
+      </p>
+    </footer>
+  </script>
 
   <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
   <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  (function(i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function() {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-    ga('create', 'UA-56551126-1', 'auto');
-    ga('send', 'event', 'angularify', 'run', 'local');
+  ga('create', 'UA-56551126-1', 'auto');
+  ga('send', 'event', 'angularify', 'run', 'local');
   </script>
 
-  <!-- angularify:app:js -->
+  <!-- angularify:todomvc:js -->
 
 </body>
 
