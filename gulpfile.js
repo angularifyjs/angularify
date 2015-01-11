@@ -106,7 +106,11 @@ gulp.task('coffee', function() {
 gulp.task('compile', function() {
   return gulp.src(['./dev/**/*.html'])
     .pipe(plugins['angular-compiler']({
-      
+
+    }))
+    .pipe(plugins['htmlPrettify']({
+      'indent_char': ' ',
+      'indent_size': 2
     }))
     .pipe(gulp.dest('./.tmp'))
     .pipe(plugins['connect'].reload());
