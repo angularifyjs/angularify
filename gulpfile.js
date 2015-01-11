@@ -1,4 +1,5 @@
 var _ = require('lodash');
+var livereload = require('connect-livereload');
 var gulp = require('gulp');
 var jshintStylish = require('jshint-stylish');
 var moment = require('moment');
@@ -9,6 +10,12 @@ var runSequence = require('run-sequence');
 var uuid = require('uuid');
 
 plugins['angular-compiler'] = require(path.resolve('node_submodules', 'gulp-angular-compiler', 'index.js'));
+
+/**************************************************************
+GLOBAL CONFIG
+/*************************************************************/
+
+var BUILD_PRODUCT_FILER = ['!./.build/vendors/**', '!./.build/**/*.{html,css,js}'];
 
 /**************************************************************
 Supported Task
@@ -124,8 +131,48 @@ gulp.task('compile', function() {
     .pipe(plugins['connect'].reload());
 });
 
+gulp.task('connect', function() {
+  if (env.CODE !== 'build') {
+    return plugins['connect'].server({
+      port: env.PORT,
+      livereload: !env.LIVERELOAD ? false : {
+        port: env.LIVERELOAD
+      },
+      middleware: function(connect, opt) {
+        var res = !env.LIVERELOAD ? [] : [livereload({
+          port: env.LIVERELOAD
+        })];
+        return _.union(res, [
+          connect.static(path.resolve('.tmp')),
+          connect.static(path.resolve('dev')),
+          lib.connect.static('vendors', path.resolve('vendors')),
+          function Injector(req, res, next) {
+            return res.end(fs.readFileSync(path.resolve('.tmp', 'index.html'), {
+              encoding: 'utf8'
+            }));
+          }
+        ]);
+      }
+    });
+  }
+  return connect.server({
+    port: env.PORT,
+    livereload: false,
+    middleware: function(connect, opt) {
+      return [
+        connect.static(path.resolve('build')),
+        function(req, res, next) {
+          return res.end(fs.readFileSync(path.resolve('build', 'index.html'), {
+            encoding: 'utf8'
+          }));
+        }
+      ];
+    }
+  });
+});
+
 gulp.task('copy-build', function() {
-  return gulp.src(['./.build/**', '!./.build/test/**', '!./.build/vendors/**', '!./.build/**/*.{html,css,js}'])
+  return gulp.src(_.union(['./.build/**'], _.isArray(BUILD_PRODUCT_FILER) ? BUILD_PRODUCT_FILER : [BUILD_PRODUCT_FILER]))
     .pipe(gulp.dest('./build'));
 });
 
@@ -251,12 +298,26 @@ gulp.task('build', function(done) {
   runSequence.apply(null, tasks);
 });
 
+gulp.task('server', function(done) {
+  var tasks = [];
+  if (env.REBUILD === 'yes') {
+    tasks.push('build');
+  }
+  tasks.push('connect');
+  if (env.CODE !== 'build' && env.options.isTest !== true) {
+    tasks.push(watch);
+  } else {
+    tasks.push(function() {
+      done();
+    });
+  }
+  runSequence.apply(null, tasks);
+});
+
 /**************************************************************
 IDEA
 /*************************************************************/
 
 /* 
 - supporting auto mode
-- grouping compiled output
-- supporting compile output injector
 */
