@@ -18,7 +18,7 @@ GLOBAL CONFIG
 var BUILD_PRODUCT_FILER = ['!./.build/vendors/**', '!./.build/**/*.{html,css,js}'];
 
 /**************************************************************
-Supported Task
+SUPPORTED TASKS
 /*************************************************************/
 
 /*
@@ -78,7 +78,7 @@ var watch = function() {
 };
 
 /**************************************************************
-Fuction Task
+FUNCTIONAL TASKS
 /*************************************************************/
 
 gulp.task('clean-build', function() {
@@ -284,7 +284,7 @@ gulp.task('useref', function() {
 });
 
 /**************************************************************
-Main Task
+MAIN TASKS
 /*************************************************************/
 
 gulp.task('build', function(done) {
@@ -313,11 +313,3 @@ gulp.task('server', function(done) {
   }
   runSequence.apply(null, tasks);
 });
-
-/**************************************************************
-IDEA
-/*************************************************************/
-
-/* 
-- supporting auto mode
-*/
