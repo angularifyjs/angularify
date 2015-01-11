@@ -1,7 +1,9 @@
 var _ = require('lodash');
+var fs = require('fs');
 var livereload = require('connect-livereload');
 var gulp = require('gulp');
 var jshintStylish = require('jshint-stylish');
+var mime = require('mime');
 var moment = require('moment');
 var path = require('path');
 var plugins = require('gulp-load-plugins')();
@@ -15,7 +17,7 @@ plugins['angular-compiler'] = require(path.resolve('node_submodules', 'gulp-angu
 GLOBAL CONFIG
 /*************************************************************/
 
-var BUILD_PRODUCT_FILER = ['!./.build/vendors/**', '!./.build/**/*.{html,css,js}'];
+var BUILD_PRODUCTION_FILER = ['!./.build/vendors/**', '!./.build/**/*.{html,css,js}'];
 
 /**************************************************************
 SUPPORTED TASKS
@@ -74,12 +76,35 @@ var watch = function() {
   var notification = function(event) {
     console.log([moment().format('hh:mm:ss'), 'File', event.path, 'was', event.type, ', running tasks...'].join(' '));
   };
-  gulp.watch(['./env/**'], ['env']).on('change', notification);
+  gulp.watch(['./dev/**/*.coffee'], ['coffee']).on('change', notification);
+  gulp.watch(['./dev/**/*.less', '!./dev/**/theme/**'], ['less']).on('change', notification);
+  gulp.watch(['./dev/**/theme/**/*.less'], ['less:theme', 'less']).on('change', notification);
+  gulp.watch(['./dev/**/*.scss'], ['scss']).on('change', notification);
+  gulp.watch(['./dev/**/theme/**/*.scss'], ['scss:theme', 'scss']).on('change', notification);
+  gulp.watch(['./angularify.json', './tmp/**/*.js', './dev/**/*.js', './dev/**/*.html'], ['compile']).on('change', notification);
 };
 
 /**************************************************************
 FUNCTIONAL TASKS
 /*************************************************************/
+
+var staticMiddleware = function(prefix, dir) {
+  prefix = '/' + prefix + '/';
+  return function staticMiddleware(req, res, next) {
+    if (req.originalUrl.indexOf(prefix) === 0) {
+      try {
+        var url = path.resolve(dir, req.originalUrl.replace(prefix, ''));
+        var data = fs.readFileSync(url);
+        res.setHeader('Content-Type', mime.lookup(url));
+        res.writeHead(200);
+        return res.end(data);
+      } catch (ex) {
+        next();
+      }
+    }
+    return next();
+  };
+};
 
 gulp.task('clean-build', function() {
   return gulp.src(['./.build', './build'], {
@@ -145,8 +170,8 @@ gulp.task('connect', function() {
         return _.union(res, [
           connect.static(path.resolve('.tmp')),
           connect.static(path.resolve('dev')),
-          lib.connect.static('vendors', path.resolve('vendors')),
-          function Injector(req, res, next) {
+          staticMiddleware('vendors', path.resolve('vendors')),
+          function injector(req, res, next) {
             return res.end(fs.readFileSync(path.resolve('.tmp', 'index.html'), {
               encoding: 'utf8'
             }));
@@ -155,13 +180,13 @@ gulp.task('connect', function() {
       }
     });
   }
-  return connect.server({
+  return plugins['connect'].server({
     port: env.PORT,
     livereload: false,
     middleware: function(connect, opt) {
       return [
         connect.static(path.resolve('build')),
-        function(req, res, next) {
+        function injector(req, res, next) {
           return res.end(fs.readFileSync(path.resolve('build', 'index.html'), {
             encoding: 'utf8'
           }));
@@ -172,7 +197,7 @@ gulp.task('connect', function() {
 });
 
 gulp.task('copy-build', function() {
-  return gulp.src(_.union(['./.build/**'], _.isArray(BUILD_PRODUCT_FILER) ? BUILD_PRODUCT_FILER : [BUILD_PRODUCT_FILER]))
+  return gulp.src(_.union(['./.build/**'], _.isArray(BUILD_PRODUCTION_FILER) ? BUILD_PRODUCTION_FILER : [BUILD_PRODUCTION_FILER]))
     .pipe(gulp.dest('./build'));
 });
 
