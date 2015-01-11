@@ -11,8 +11,6 @@ var pngquant = require('imagemin-pngquant');
 var runSequence = require('run-sequence');
 var uuid = require('uuid');
 
-plugins['angular-compiler'] = require(path.resolve('node_submodules', 'gulp-angular-compiler', 'index.js'));
-
 /**************************************************************
 GLOBAL CONFIG
 /*************************************************************/
@@ -138,7 +136,7 @@ gulp.task('coffee', function() {
 
 gulp.task('compile', function() {
   return gulp.src(['./dev/**/*.html'])
-    .pipe(plugins['angular-compiler']({
+    .pipe(plugins['angularCompiler']({
       injectors: {
         onBuildCss: function(data, info) {
           return '<!-- build:css styles/' + (info.name ? info.name : uuid.v4()) + '.css -->' + data + '<!-- endbuild -->';
