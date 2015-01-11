@@ -27,5 +27,18 @@
   },
   "priorities": {
 
-  }
+  },
+  "groups": [{
+    "name": "libs",
+    "regex": ".*.min.css"
+  }, {
+    "name": "css",
+    "regex": ".*.css"
+  }, {
+    "name": "libs",
+    "regex": ".*.min.js"
+  }, {
+    "name": "js",
+    "regex": ".*.js"
+  }]
 }

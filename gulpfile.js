@@ -6,6 +6,7 @@ var path = require('path');
 var plugins = require('gulp-load-plugins')();
 var pngquant = require('imagemin-pngquant');
 var runSequence = require('run-sequence');
+var uuid = require('uuid');
 
 plugins['angular-compiler'] = require(path.resolve('node_submodules', 'gulp-angular-compiler', 'index.js'));
 
@@ -106,7 +107,14 @@ gulp.task('coffee', function() {
 gulp.task('compile', function() {
   return gulp.src(['./dev/**/*.html'])
     .pipe(plugins['angular-compiler']({
-
+      injectors: {
+        onBuildCss: function(data, info) {
+          return '<!-- build:css styles/' + (info.name ? info.name : uuid.v4()) + '.css -->' + data + '<!-- endbuild -->';
+        },
+        onBuildJs: function(data, info) {
+          return '<!-- build:js scripts/' + (info.name ? info.name : uuid.v4()) + '.js -->' + data + '<!-- endbuild -->';
+        }
+      }
     }))
     .pipe(plugins['htmlPrettify']({
       'indent_char': ' ',
@@ -234,7 +242,6 @@ Main Task
 
 gulp.task('build', function(done) {
   var tasks = ['clean-dev', 'scss', 'scss:theme', 'less', 'less:theme', 'coffee', 'compile', 'jshint', 'jscs'];
-  tasks = [];
   if (env.CODE === 'build') {
     tasks = _.union(tasks, ['clean-build', 'copy-vendors', 'copy-dev', 'copy-tmp', 'imagemin', 'ngAnnotate', 'useref', 'copy-build', 'clean-build-end']);
   }

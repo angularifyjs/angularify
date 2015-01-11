@@ -2,6 +2,7 @@
   "bitwise": true,
   "boss": true,
   "browser": true,
+  "devel": true,
   "camelcase": true,
   "eqnull": true,
   "expr": true,
