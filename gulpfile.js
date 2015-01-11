@@ -338,3 +338,7 @@ gulp.task('server', function(done) {
   }
   runSequence.apply(null, tasks);
 });
+
+gulp.task('test', function() {
+
+});
