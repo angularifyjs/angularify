@@ -1,0 +1,51 @@
+{
+  "baseDirs": [
+    ".tmp",
+    "dev"
+  ],
+  "exts": {
+    "include": ["js", "min.js"],
+    "js": ["js", "min.js"],
+    "css": ["css", "min.css"]
+  },
+  "dependencies": {
+    "ngRoute": [
+      "vendors/angular-route/angular-route.js"
+    ],
+    "todomvc": [
+      "vendors/todomvc-common/base.css",
+      "app/css.css",
+      "vendors/todomvc-common/base.js",
+      "vendors/angular/angular.js",
+      "app/js.js"
+    ],
+    "todomvc-todoCtrl": [
+      "common/controllers/todoCtrl.js"
+    ],
+    "todomvc-todoEscape": [
+      "common/directives/todoEscape.js"
+    ],
+    "todomvc-todoFocus": [
+      "common/directives/todoFocus.js"
+    ],
+    "todomvc-todoStorage": [
+      "common/services/todoStorage.js"
+    ]
+  },
+  "priorities": {
+
+  },
+  "groups": [{
+    "name": "libs",
+    "regex": ".*.min.css"
+  }, {
+    "name": "css",
+    "regex": ".*.css"
+  }, {
+    "name": "libs",
+    "regex": ".*.min.js"
+  }, {
+    "name": "js",
+    "regex": ".*.js"
+  }]
+}
