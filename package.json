@@ -31,7 +31,7 @@
   "devDependencies": {
     "coveralls": "^2.11.2",
     "gulp": "^3.8.10",
-    "gulp-angular-compiler": "^0.1.0",
+    "gulp-angular-compiler": "git://github.com/angularifyjs/gulp-angular-compiler.git",
     "gulp-clean": "^0.3.1",
     "gulp-coffee": "^2.2.0",
     "gulp-connect": "^2.2.0",
@@ -58,6 +58,7 @@
     "run-sequence": "^1.0.2",
     "uuid": "^2.0.1",
     "connect-livereload": "^0.5.2",
-    "mime": "^1.2.11"
+    "mime": "^1.2.11",
+    "chokidar": "^1.0.1"
   }
 }
