@@ -1,4 +1,5 @@
 var _ = require('lodash');
+var chokidar = require('chokidar');
 var fs = require('fs');
 var livereload = require('connect-livereload');
 var gulp = require('gulp');
@@ -71,15 +72,70 @@ var env = GLOBAL.env = {
 }(env));
 
 var watch = function() {
-  var notification = function(event) {
-    console.log([moment().format('hh:mm:ss'), 'File', event.path, 'was', event.type, ', running tasks...'].join(' '));
+  var notification = function(type, path) {
+    console.log([moment().format('hh:mm:ss'), 'File', path, 'was', '<' + type + '>', 'running tasks...'].join(' '));
   };
-  gulp.watch(['./dev/**/*.coffee'], ['coffee']).on('change', notification);
-  gulp.watch(['./dev/**/*.less', '!./dev/**/theme/**'], ['less']).on('change', notification);
-  gulp.watch(['./dev/**/theme/**/*.less'], ['less:theme', 'less']).on('change', notification);
-  gulp.watch(['./dev/**/*.scss'], ['scss']).on('change', notification);
-  gulp.watch(['./dev/**/theme/**/*.scss'], ['scss:theme', 'scss']).on('change', notification);
-  gulp.watch(['./angularify.json', './tmp/**/*.js', './dev/**/*.js', './dev/**/*.html'], ['compile']).on('change', notification);
+  var gulpWatchWrapper = function(dirs, tasks) {
+    var isReady = false;
+    dirs = dirs || [];
+    dirs = _.isArray(dirs) ? dirs : [dirs];
+    tasks = tasks || [];
+    tasks = _.isArray(tasks) ? tasks : [tasks];
+    var keys = [
+      'add', 'change', 'unlink', 'addDir', 'unlinkDir', 'error', 'ready', 'raw',
+      'add_all', 'add_change_unlink'
+    ];
+    var observer = {};
+    _.each(keys, function(key) {
+      observer[key] = function() {};
+    });
+    var res = {
+      on: function(key, fn) {
+        observer[key] = fn;
+        return res;
+      }
+    };
+    chokidar.watch(dirs)
+      .on('add', function(path) {
+        observer['add_all'].apply(null, arguments);
+        if (isReady) {
+          observer['add'].apply(null, arguments);
+          observer['add_change_unlink']('add', path);
+          runSequence.apply(null, tasks);
+        }
+      })
+      .on('change', function(path) {
+        if (isReady) {
+          observer['change'].apply(null, arguments);
+          observer['add_change_unlink']('change', path);
+          runSequence.apply(null, tasks);
+        }
+      })
+      .on('unlink', function(path) {
+        if (isReady) {
+          observer['unlink'].apply(null, arguments);
+          observer['add_change_unlink']('unlink', path);
+          runSequence.apply(null, tasks);
+        }
+      })
+      .on('error', function() {
+        observer['error'].apply(null, arguments);
+      })
+      .on('ready', function() {
+        isReady = true;
+        observer['ready'].apply(null, arguments);
+      })
+      .on('raw', function() {
+        observer['raw'].apply(null, arguments);
+      });
+    return res;
+  };
+  gulpWatchWrapper(['./dev/**/*.coffee'], ['coffee']).on('add_change_unlink', notification);
+  gulpWatchWrapper(['./dev/**/*.less', '!./dev/**/theme/**'], ['less']).on('add_change_unlink', notification);
+  gulpWatchWrapper(['./dev/**/theme/**/*.less'], ['less:theme', 'less']).on('add_change_unlink', notification);
+  gulpWatchWrapper(['./dev/**/*.scss'], ['scss']).on('add_change_unlink', notification);
+  gulpWatchWrapper(['./dev/**/theme/**/*.scss'], ['scss:theme', 'scss']).on('add_change_unlink', notification);
+  gulpWatchWrapper(['./angularify.json', './tmp/**/*.js', './dev/**/*.js', './dev/**/*.html'], ['compile']).on('add_change_unlink', notification);
 };
 
 /**************************************************************
