@@ -1,0 +1,19 @@
+<div ng-controller="CtrlHeader">
+	<ul>
+		<li ng-repeat="m in header.data | orderBy: 'order'">
+			<a ui-sref="{{m.state}}" ng-bind="m.title"></a>
+		</li>
+	</ul>
+	<ul>
+		<li ng-repeat="(k, m) in contact">
+			<span ng-bind="k"></span>
+			<span>-</span>
+			<span ng-bind="m"></span>
+		</li>
+	</ul>
+	<div>
+		<input ng-model="input.email" />
+		<input ng-model="input.password" />
+		<button ng-click="submit()">Submit</button>
+	</div>
+</div>

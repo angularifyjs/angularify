@@ -36,7 +36,7 @@
     "ui.router": [
       "vendors/angular-ui-router/release/angular-ui-router.js"
     ],
-
+    
     "base": [
       "vendors/angular/angular.js",
       "vendors/lodash/lodash.js",
