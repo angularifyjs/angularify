@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('app.user', [
   'base',
   'app.user.detail',

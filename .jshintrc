@@ -7,7 +7,8 @@
   "eqnull": true,
   "expr": true,
   "globals": {
-    "angular": false
+    "angular": false,
+    "_": false
   },
   "globalstrict": true,
   "immed": true,

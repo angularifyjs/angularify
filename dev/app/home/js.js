@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('app.home', [
 	'base',
 	'com-header',
