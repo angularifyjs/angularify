@@ -12,28 +12,64 @@
     "ngRoute": [
       "vendors/angular-route/angular-route.js"
     ],
+
     "todomvc": [
       "vendors/todomvc-common/base.css",
-      "app/css.css",
+      "todomvc/css.css",
       "vendors/todomvc-common/base.js",
       "vendors/angular/angular.js",
-      "app/js.js"
+      "todomvc/js.js"
     ],
     "todomvc-todoCtrl": [
-      "common/controllers/todoCtrl.js"
+      "todomvc/controllers/todoCtrl.js"
     ],
     "todomvc-todoEscape": [
-      "common/directives/todoEscape.js"
+      "todomvc/directives/todoEscape.js"
     ],
     "todomvc-todoFocus": [
-      "common/directives/todoFocus.js"
+      "todomvc/directives/todoFocus.js"
     ],
     "todomvc-todoStorage": [
-      "common/services/todoStorage.js"
+      "todomvc/services/todoStorage.js"
+    ],
+
+    "ui.router": [
+      "vendors/angular-ui-router/release/angular-ui-router.js"
+    ],
+
+    "base": [
+      "vendors/angular/angular.js",
+      "vendors/lodash/lodash.js",
+      "common/base/js.js"
+    ],
+
+    "app": [
+      "app/css.css",
+      "app/js.js"
+    ],
+    "app.home": [
+      "app/home/css.css",
+      "app/home/js.js"
+    ],
+    "app.about": [
+      "app/about/css.css",
+      "app/about/js.js"
+    ],
+    "app.user": [
+      "app/user/css.css",
+      "app/user/js.js"
+    ],
+    "app.user.detail": [
+      "app/user/detail/css.css",
+      "app/user/detail/js.js"
+    ],
+    "com-header": [
+      "common/com-header/css.css",
+      "common/com-header/js.js"
     ]
   },
   "priorities": {
-
+    "vendors/angular/angular.js": 1
   },
   "groups": [{
     "name": "libs",

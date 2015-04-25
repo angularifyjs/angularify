@@ -1,0 +1,7 @@
+<div ng-controller="CtrlComHeader">
+	<ul>
+		<li ng-repeat="m in comHeader.menu | orderBy: 'order'">
+			<a ui-sref="{{m.state}}" ng-bind="m.title"></a>
+		</li>
+	</ul>
+</div>
