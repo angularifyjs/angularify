@@ -1,6 +1,8 @@
+'use strict';
+
 angular.module('com-header', [
   'base',
-	'ui.router'
+  'ui.router'
 
 ]).provider('comHeader', function() {
   var ComHeader = function() {
@@ -11,11 +13,11 @@ angular.module('com-header', [
     this.menu = [];
   };
   ComHeader.prototype.addMenu = function(title, state, order) {
-  	this.menu.push({
-  		title: title,
-  		state: state,
+    this.menu.push({
+      title: title,
+      state: state,
       order: order
-  	});
+    });
   };
 
   ComHeader.$get = function() {
@@ -24,7 +26,7 @@ angular.module('com-header', [
   return ComHeader;
 
 }).controller('CtrlComHeader', function() {
-	
+
 
 }).run(function(comHeader, $rootScope) {
   $rootScope.comHeader = comHeader;
