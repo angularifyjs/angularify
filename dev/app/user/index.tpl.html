@@ -1,0 +1,13 @@
+<div ng-controller="CtrlAppUser">
+	<h1>This is user page</h1>
+	<ul>
+		<li ng-repeat="u in users">
+			<a ui-sref="user.detail({uid: u.uid})">
+				<span ng-bind="u.uid"></span>
+				<span>-</span>
+				<span ng-bind="u.name"></span>
+			</a>
+		</li>
+	</ul>
+	<div ui-view></div>
+</div>

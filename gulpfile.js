@@ -23,19 +23,9 @@ SUPPORTED TASKS
 /*************************************************************/
 
 /*
-NODE_ENV=(dev|test|stg|prod) API=(api|mock) CODE=(dev|build) gulp build
+CODE=(dev|build) gulp build
 
-NODE_ENV=(dev|test|stg|prod) API=(api|mock) REBUILD=(yes|no) CODE=(dev|build) PORT=(1337) LIVERELOAD=(35729) gulp server
-
-NODE_ENV=(dev|test|stg|prod) API=(api|mock) REBUILD=(yes|no) CODE=(dev|build) gulp test
-
-NODE_ENV=(dev|test|stg|prod) API=(api|mock) REBUILD=(yes|no) gulp test:service --suite=(all|anyDefinedSuiteName) --capabilities.browserName=(phantomjs|chrome)
-
-NODE_ENV=(dev|test|stg|prod) API=(api|mock) REBUILD=(yes|no) MODULE=(all) gulp test:unit
-
-NODE_ENV=(dev|test|stg|prod) API=(api|mock) REBUILD=(yes|no) CODE=(dev|build) gulp test:integration --suite=(all|anyDefinedSuiteName) --capabilities.browserName=(phantomjs|chrome)
-
-NODE_ENV=(dev|test|stg|prod) gulp sitemap
+REBUILD=(yes|no) CODE=(dev|build) PORT=(1337) LIVERELOAD=(35729) gulp server
 */
 
 /**************************************************************
@@ -43,20 +33,10 @@ ENV
 /*************************************************************/
 
 var env = GLOBAL.env = {
-  API: 'api',
-  BROWSER: 'phantom',
   CODE: 'dev',
-  LOOKUP_MODE: 'auto',
-  DEBUG: 'no',
   LIVERELOAD: 35729,
-  MODULE: null,
-  NODE_ENV: 'dev',
   PORT: 1337,
-  REBUILD: 'yes',
-  SUITE: null,
-  options: {
-    isTest: false
-  }
+  REBUILD: 'yes'
 };
 (function(env) {
   _.each(env, function(value, key) {
@@ -190,15 +170,19 @@ gulp.task('coffee', function() {
     .pipe(plugins['connect'].reload());
 });
 
+var formatPath = function(input) {
+  input = input.replace(/dev\/|\.html$/g, '').replace(/\//g, '-');
+  return input === 'index' ? '' : (input + '-');
+};
 gulp.task('compile', function() {
   return gulp.src(['./dev/**/*.html'])
     .pipe(plugins['angularCompiler']({
       injectors: {
-        onBuildCss: function(data, info) {
-          return '<!-- build:css styles/' + (info.name ? info.name : uuid.v4()) + '.css -->' + data + '<!-- endbuild -->';
+        onBuildCss: function(data, info, compilePath) {
+          return '<!-- build:css styles/' + formatPath(compilePath) + (info.name ? info.name : uuid.v4()) + '.css -->' + data + '<!-- endbuild -->';
         },
-        onBuildJs: function(data, info) {
-          return '<!-- build:js scripts/' + (info.name ? info.name : uuid.v4()) + '.js -->' + data + '<!-- endbuild -->';
+        onBuildJs: function(data, info, compilePath) {
+          return '<!-- build:js scripts/' + formatPath(compilePath) + (info.name ? info.name : uuid.v4()) + '.js -->' + data + '<!-- endbuild -->';
         }
       }
     }))
@@ -383,7 +367,7 @@ gulp.task('server', function(done) {
     tasks.push('build');
   }
   tasks.push('connect');
-  if (env.CODE !== 'build' && env.options.isTest !== true) {
+  if (env.CODE !== 'build') {
     tasks.push(watch);
   } else {
     tasks.push(function() {
@@ -391,8 +375,4 @@ gulp.task('server', function(done) {
     });
   }
   runSequence.apply(null, tasks);
-});
-
-gulp.task('test', function() {
-
 });
